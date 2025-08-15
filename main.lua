@@ -50,6 +50,14 @@ end
 
 function love.update(dt)
 
+    if love.keyboard.isDown('left') then
+        paddle.dx = -PADDLE_SPEED
+    elseif love.keyboard.isDown('right') then
+        paddle.dx = PADDLE_SPEED
+    else
+        paddle.dx = 0
+    end
+
     paddle:update(dt)
     ball:update(dt)
 

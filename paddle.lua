@@ -11,7 +11,7 @@ end
 
 function Paddle:update(dt)
     -- ! We need to check if the paddle is not out of the screen
-    self.x = self.x + dt * self.dx
+    self.x = math.min(VIRTUAL_WIDTH - self.width, math.max(self.x + dt * self.dx, 0))
 end
 
 function Paddle:draw()
