@@ -36,7 +36,7 @@ function love.load()
     paddle = Paddle(VIRTUAL_WIDTH / 2 - 10, VIRTUAL_HEIGHT - 15, 20, 5)
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
 
-    lifes = 10
+    lifes = 3
 
     gameState = 'start'
 
@@ -65,15 +65,6 @@ function love.update(dt)
 
     if gameState == 'play' then
 
-        -- Move the paddle 
-        if love.keyboard.isDown('left') then
-            paddle.dx = -PADDLE_SPEED
-        elseif love.keyboard.isDown('right') then
-            paddle.dx = PADDLE_SPEED
-        else
-            paddle.dx = 0
-        end
-
         -- Check if the ball touches the edges
         if ball.x <= 0 then
             ball.x = 0
@@ -93,7 +84,11 @@ function love.update(dt)
         if ball.y >= VIRTUAL_HEIGHT then 
             lifes = lifes - 1
             ball:reset()
-            gameState = 'serve'
+            if lifes == 0 then
+                gameState = 'lost'
+            else
+                gameState = 'serve'
+            end
         end
 
         -- Check collisions with the paddle
@@ -108,6 +103,15 @@ function love.update(dt)
             end
         end
     
+    end
+
+    -- Move the paddle no matter what state we are in
+    if love.keyboard.isDown('left') then
+        paddle.dx = -PADDLE_SPEED
+    elseif love.keyboard.isDown('right') then
+        paddle.dx = PADDLE_SPEED
+    else
+        paddle.dx = 0
     end
 
     paddle:update(dt)
@@ -126,6 +130,11 @@ function love.keypressed(key)
         if gameState == 'start' or gameState == 'serve' then
             gameState = 'play'
         end
+        if gameState == 'lost' then
+            lifes = 3
+            gameState = 'start'
+            ball:reset()
+        end
     end
 end
 
@@ -142,6 +151,11 @@ function love.draw()
 
     if gameState == 'serve' then
         love.graphics.printf('Press enter to serve the ball!', 0, 20, VIRTUAL_WIDTH, 'center')
+    end
+
+    if gameState == 'lost' then
+        love.graphics.printf('You lost the game!', 0, 20, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Press enter to restart!', 0, 40, VIRTUAL_WIDTH, 'center')
     end
 
     ball:draw()
