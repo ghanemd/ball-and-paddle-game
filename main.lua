@@ -38,6 +38,12 @@ function love.load()
 
     lifes = 3
 
+    sounds ={
+        ['life_lost'] = love.audio.newSource('sounds/life_lost.wav', 'static'),
+        ['paddle_hit'] = love.audio.newSource('sounds/paddle_hit.wav', 'static'),
+        ['wall_hit'] = love.audio.newSource('sounds/wall_hit.wav', 'static')
+    }
+
     gameState = 'start'
 
 end
@@ -69,16 +75,19 @@ function love.update(dt)
         if ball.x <= 0 then
             ball.x = 0
             ball.dx = -ball.dx
+            sounds['wall_hit']:play()
         end
 
         if ball.x + ball.width >= VIRTUAL_WIDTH then
             ball.x = VIRTUAL_WIDTH - ball.width
             ball.dx = -ball.dx
+            sounds['wall_hit']:play()
         end
 
         if ball.y <= 0 then
             ball.y = 0
             ball.dy = -ball.dy
+            sounds['wall_hit']:play()
         end 
 
         if ball.y >= VIRTUAL_HEIGHT then 
@@ -89,6 +98,7 @@ function love.update(dt)
             else
                 gameState = 'serve'
             end
+            sounds['life_lost']:play()
         end
 
         -- Check collisions with the paddle
@@ -101,6 +111,7 @@ function love.update(dt)
             else 
                 ball.dx = math.random(50, 150)
             end
+            sounds['paddle_hit']:play()
         end
     
     end
