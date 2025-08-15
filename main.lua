@@ -58,7 +58,7 @@ function love.update(dt)
 
         ball.dx = math.random(-100, 100)
         ball.dy = math.random(-100, 100)
-        
+
     end
 
     if gameState == 'play' then
@@ -87,6 +87,12 @@ function love.update(dt)
             ball.y = 0
             ball.dy = -ball.dy
         end 
+
+        -- Check collisions with the paddle
+        if ball:collides(paddle) then 
+            ball.dx = 0
+            ball.dy = 0
+        end
     
     end
 
