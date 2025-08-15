@@ -11,6 +11,13 @@ function Ball:init(x, y, width, height)
     self.dy = 0
 end
 
+function Ball:reset()
+    self.x = VIRTUAL_WIDTH / 2 - 2
+    self.y = VIRTUAL_HEIGHT / 2 - 2
+    self.dx = 0
+    self.dy = 0
+end
+
 function Ball:collides(paddle)
 
     if self.y + self.height < paddle.y then 

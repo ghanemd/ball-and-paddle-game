@@ -36,6 +36,8 @@ function love.load()
     paddle = Paddle(VIRTUAL_WIDTH / 2 - 10, VIRTUAL_HEIGHT - 15, 20, 5)
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
 
+    lifes = 10
+
     gameState = 'start'
 
 end
@@ -54,7 +56,7 @@ end
 
 function love.update(dt)
 
-    if gameState == 'start' then
+    if gameState == 'start' or gameState == 'serve' then
 
         ball.dx = math.random(-100, 100)
         ball.dy = math.random(-100, 100)
@@ -88,6 +90,12 @@ function love.update(dt)
             ball.dy = -ball.dy
         end 
 
+        if ball.y >= VIRTUAL_HEIGHT then 
+            lifes = lifes - 1
+            ball:reset()
+            gameState = 'serve'
+        end
+
         -- Check collisions with the paddle
         if ball:collides(paddle) then 
             ball.y = paddle.y - ball.height
@@ -115,7 +123,7 @@ function love.keypressed(key)
         love.event.quit()
     end
     if key == 'return' or key == 'enter' then
-        if gameState == 'start' then
+        if gameState == 'start' or gameState == 'serve' then
             gameState = 'play'
         end
     end
@@ -126,8 +134,14 @@ function love.draw()
     -- begin drawing with push, in our virtual resolution
     push:apply('start')
 
+    love.graphics.print('Lifes: ' .. tostring(lifes), 10, 10)
+
     if gameState == 'start' then
         love.graphics.printf('Press enter to begin the game!', 0, 20, VIRTUAL_WIDTH, 'center')
+    end
+
+    if gameState == 'serve' then
+        love.graphics.printf('Press enter to serve the ball!', 0, 20, VIRTUAL_WIDTH, 'center')
     end
 
     ball:draw()
