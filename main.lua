@@ -90,8 +90,14 @@ function love.update(dt)
 
         -- Check collisions with the paddle
         if ball:collides(paddle) then 
-            ball.dx = 0
-            ball.dy = 0
+            ball.y = paddle.y - ball.height
+            -- Increment the velocity by 4%
+            ball.dy = -ball.dy * 1.04
+            if ball.dx < 0 then 
+                ball.dx = -math.random(50, 150)
+            else 
+                ball.dx = math.random(50, 150)
+            end
         end
     
     end
