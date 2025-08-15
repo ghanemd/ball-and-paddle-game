@@ -31,6 +31,8 @@ function love.load()
         vsync = true
     })
 
+    math.randomseed(os.time())
+
     paddle = Paddle(VIRTUAL_WIDTH / 2 - 10, VIRTUAL_HEIGHT - 15, 20, 5)
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
 
@@ -52,8 +54,13 @@ end
 
 function love.update(dt)
 
-    if gameState == 'play' then
+    if gameState == 'start' then
+        ball.dx = math.random(-100, 100)
+        ball.dy = math.random(-100, 100)
+    end
 
+    if gameState == 'play' then
+        -- Move the paddle 
         if love.keyboard.isDown('left') then
             paddle.dx = -PADDLE_SPEED
         elseif love.keyboard.isDown('right') then
@@ -65,7 +72,9 @@ function love.update(dt)
     end
 
     paddle:update(dt)
-    ball:update(dt)
+    if gameState == 'play' then
+        ball:update(dt)
+    end
 
 end
 
