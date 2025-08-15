@@ -55,11 +55,14 @@ end
 function love.update(dt)
 
     if gameState == 'start' then
+
         ball.dx = math.random(-100, 100)
         ball.dy = math.random(-100, 100)
+        
     end
 
     if gameState == 'play' then
+
         -- Move the paddle 
         if love.keyboard.isDown('left') then
             paddle.dx = -PADDLE_SPEED
@@ -68,6 +71,22 @@ function love.update(dt)
         else
             paddle.dx = 0
         end
+
+        -- Check if the ball touches the edges
+        if ball.x <= 0 then
+            ball.x = 0
+            ball.dx = -ball.dx
+        end
+
+        if ball.x + ball.width >= VIRTUAL_WIDTH then
+            ball.x = VIRTUAL_WIDTH - ball.width
+            ball.dx = -ball.dx
+        end
+
+        if ball.y <= 0 then
+            ball.y = 0
+            ball.dy = -ball.dy
+        end 
     
     end
 
