@@ -34,6 +34,8 @@ function love.load()
     paddle = Paddle(VIRTUAL_WIDTH / 2 - 10, VIRTUAL_HEIGHT - 15, 20, 5)
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
 
+    gameState = 'start'
+
 end
 
 
@@ -50,12 +52,16 @@ end
 
 function love.update(dt)
 
-    if love.keyboard.isDown('left') then
-        paddle.dx = -PADDLE_SPEED
-    elseif love.keyboard.isDown('right') then
-        paddle.dx = PADDLE_SPEED
-    else
-        paddle.dx = 0
+    if gameState == 'play' then
+
+        if love.keyboard.isDown('left') then
+            paddle.dx = -PADDLE_SPEED
+        elseif love.keyboard.isDown('right') then
+            paddle.dx = PADDLE_SPEED
+        else
+            paddle.dx = 0
+        end
+    
     end
 
     paddle:update(dt)
@@ -68,12 +74,21 @@ function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
     end
+    if key == 'return' or key == 'enter' then
+        if gameState == 'start' then
+            gameState = 'play'
+        end
+    end
 end
 
 
 function love.draw()
     -- begin drawing with push, in our virtual resolution
     push:apply('start')
+
+    if gameState == 'start' then
+        love.graphics.printf('Press enter to begin the game!', 0, 20, VIRTUAL_WIDTH, 'center')
+    end
 
     ball:draw()
     paddle:draw()
